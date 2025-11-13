@@ -23,6 +23,8 @@ import { getCookie } from "@/utils/getToken";
 import authService from "@/utils/authService";
 import { useAuth } from "../context/auth-context";
 
+import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
+
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -86,7 +88,9 @@ export default function LoginPage() {
         const redirectPath = userRole === "admin" ? "/dashboard" : "/";
         router.push(redirectPath);
       }, 100);
-      { /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
+      {
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+      }
     } catch (err: any) {
       const message = err.message || "Login failed. Please try again.";
       toast.error(message, {
@@ -343,6 +347,50 @@ export default function LoginPage() {
                     Create Account
                   </Link>
                 </p>
+              </div>
+              {/* Social Login Options */}
+              <div className="mt-6 flex flex-col items-center space-y-3">
+                <p className="text-gray-500 text-sm">Or continue with</p>
+
+                <div className="flex justify-center space-x-4">
+                  {/* Google */}
+                  <button
+                    type="button"
+                    onClick={() => (window.location.href = "/api/auth/google")}
+                    className="flex items-center justify-center w-12 h-12 rounded-full 
+                 border border-emerald-500 bg-white 
+                 hover:bg-emerald-50 hover:shadow-md 
+                 transition-all duration-300"
+                  >
+                    <FaGoogle className="text-emerald-600 text-xl" />
+                  </button>
+
+                  {/* Facebook */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      (window.location.href = "/api/auth/facebook")
+                    }
+                    className="flex items-center justify-center w-12 h-12 rounded-full 
+                 border border-emerald-500 bg-white 
+                 hover:bg-emerald-50 hover:shadow-md 
+                 transition-all duration-300"
+                  >
+                    <FaFacebook className="text-emerald-600 text-xl" />
+                  </button>
+
+                  {/* Apple */}
+                  <button
+                    type="button"
+                    onClick={() => (window.location.href = "/api/auth/apple")}
+                    className="flex items-center justify-center w-12 h-12 rounded-full 
+                 border border-emerald-500 bg-white 
+                 hover:bg-emerald-50 hover:shadow-md 
+                 transition-all duration-300"
+                  >
+                    <FaApple className="text-emerald-600 text-xl" />
+                  </button>
+                </div>
               </div>
             </CardContent>
           </Card>

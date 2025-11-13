@@ -43,6 +43,8 @@ import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 
+import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
+
 enum UserRole {
   USER = "user",
   ADMIN = "admin",
@@ -657,6 +659,50 @@ export default function RegistrationPage() {
                     Sign In
                   </Link>
                 </p>
+              </div>
+              {/* Social Login Options */}
+              <div className="mt-6 flex flex-col items-center space-y-3">
+                <p className="text-gray-500 text-sm">Or continue with</p>
+
+                <div className="flex justify-center space-x-4">
+                  {/* Google */}
+                  <button
+                    type="button"
+                    onClick={() => (window.location.href = "/api/auth/google")}
+                    className="flex items-center justify-center w-12 h-12 rounded-full 
+                               border border-emerald-500 bg-white 
+                               hover:bg-emerald-50 hover:shadow-md 
+                               transition-all duration-300"
+                  >
+                    <FaGoogle className="text-emerald-600 text-xl" />
+                  </button>
+
+                  {/* Facebook */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      (window.location.href = "/api/auth/facebook")
+                    }
+                    className="flex items-center justify-center w-12 h-12 rounded-full 
+                               border border-emerald-500 bg-white 
+                               hover:bg-emerald-50 hover:shadow-md 
+                               transition-all duration-300"
+                  >
+                    <FaFacebook className="text-emerald-600 text-xl" />
+                  </button>
+
+                  {/* Apple */}
+                  <button
+                    type="button"
+                    onClick={() => (window.location.href = "/api/auth/apple")}
+                    className="flex items-center justify-center w-12 h-12 rounded-full 
+                               border border-emerald-500 bg-white 
+                               hover:bg-emerald-50 hover:shadow-md 
+                               transition-all duration-300"
+                  >
+                    <FaApple className="text-emerald-600 text-xl" />
+                  </button>
+                </div>
               </div>
             </CardContent>
           </Card>
