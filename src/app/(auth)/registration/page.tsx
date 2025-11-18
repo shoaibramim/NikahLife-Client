@@ -43,7 +43,7 @@ import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 
-import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
+import { FaGoogle, FaYahoo, FaGithub } from "react-icons/fa";
 
 enum UserRole {
   USER = "user",
@@ -677,30 +677,30 @@ export default function RegistrationPage() {
                     <FaGoogle className="text-emerald-600 text-xl" />
                   </button>
 
-                  {/* Facebook */}
+                  {/* Yahoo */}
                   <button
                     type="button"
                     onClick={() =>
-                      (window.location.href = "/api/auth/facebook")
+                      (window.location.href = "/api/auth/yahoo")
                     }
                     className="flex items-center justify-center w-12 h-12 rounded-full 
                                border border-emerald-500 bg-white 
                                hover:bg-emerald-50 hover:shadow-md 
                                transition-all duration-300"
                   >
-                    <FaFacebook className="text-emerald-600 text-xl" />
+                    <FaYahoo className="text-emerald-600 text-xl" />
                   </button>
 
-                  {/* Apple */}
+                  {/* Github */}
                   <button
                     type="button"
-                    onClick={() => (window.location.href = "/api/auth/apple")}
+                    onClick={() => (window.location.href = "/api/auth/github")}
                     className="flex items-center justify-center w-12 h-12 rounded-full 
                                border border-emerald-500 bg-white 
                                hover:bg-emerald-50 hover:shadow-md 
                                transition-all duration-300"
                   >
-                    <FaApple className="text-emerald-600 text-xl" />
+                    <FaGithub className="text-emerald-600 text-xl" />
                   </button>
                 </div>
               </div>
