@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Crown, Shield, Eye } from "lucide-react";
+import { Crown, Shield, Eye, CheckCircle } from "lucide-react";
 import axios from "axios";
 import { useLanguage } from "@/hooks/use-language";
 import { PageLoader } from "@/components/common/Loader";
@@ -11,16 +11,41 @@ import { NavigationButtons } from "./navigationButton";
 import { ProfileData } from "@/types/profile";
 import { useAuth } from "@/app/(auth)/context/auth-context";
 import { getOwnBiodata } from "@/app/actions/getOwnBiodata";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Profile() {
   const [profile, setProfile] = React.useState<ProfileData | undefined>();
   const [loading, setLoading] = React.useState(false);
+  const [showOAuthSuccess, setShowOAuthSuccess] = React.useState(false);
+  const [oauthProvider, setOauthProvider] = React.useState("");
+  
   const token = getCookie("token") || "";
   const { user } = useAuth();
+  const { language } = useLanguage();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Check for OAuth login success
+  React.useEffect(() => {
+    const oauth = searchParams.get("oauth");
+    const login = searchParams.get("login");
+
+    if (login === "success" && oauth) {
+      setShowOAuthSuccess(true);
+      setOauthProvider(oauth);
+
+      // Auto-hide success message after 5 seconds
+      setTimeout(() => setShowOAuthSuccess(false), 5000);
+
+      // Clean URL without triggering re-render
+      window.history.replaceState({}, "", "/profile");
+    }
+  }, [searchParams]);
 
   React.useEffect(() => {
     getOwnBiodata();
   }, []);
+
   React.useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
@@ -43,16 +68,50 @@ export default function Profile() {
     };
 
     fetchProfile();
-  }, []);
-
-  const { language } = useLanguage();
+  }, [token]);
 
   if (loading) {
     return <PageLoader />;
   }
 
+  const getProviderName = (provider: string) => {
+    const providers: { [key: string]: string } = {
+      google: "Google",
+      github: "GitHub",
+      yahoo: "Yahoo",
+    };
+    return providers[provider] || provider;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100 dark:from-gray-950 dark:via-gray-900 dark:to-emerald-950 mt-7">
+      {/* OAuth Success Banner */}
+      {showOAuthSuccess && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-slide-down">
+          <div className="bg-emerald-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 min-w-[320px]">
+            <CheckCircle className="w-6 h-6 flex-shrink-0" />
+            <div>
+              <p className="font-semibold">
+                {language === "bn"
+                  ? "সফলভাবে লগইন হয়েছে!"
+                  : "Successfully Logged In!"}
+              </p>
+              <p className="text-sm text-emerald-100">
+                {language === "bn"
+                  ? `${getProviderName(oauthProvider)} দিয়ে লগইন সম্পন্ন হয়েছে`
+                  : `Logged in with ${getProviderName(oauthProvider)}`}
+              </p>
+            </div>
+            <button
+              onClick={() => setShowOAuthSuccess(false)}
+              className="ml-4 text-white hover:text-emerald-100"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-emerald-800 dark:from-emerald-800 dark:to-emerald-950"></div>
         <div className="absolute inset-0 bg-black/10 dark:bg-black/30"></div>
@@ -128,26 +187,6 @@ export default function Profile() {
               </div>
 
               <NavigationButtons />
-
-              {/* <div className="mt-8 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 dark:from-emerald-400/10 dark:to-emerald-500/10 rounded-xl py-6 px-3 border border-emerald-200 dark:border-emerald-800">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Crown className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-emerald-800 dark:text-emerald-200 mb-2">
-                      {language === "bn"
-                        ? "প্রিমিয়াম সদস্য!"
-                        : "Premium Member!"}
-                    </h3>
-                    <p className="text-emerald-700 dark:text-emerald-300 leading-relaxed">
-                      {language === "bn"
-                        ? "আপনার প্রিমিয়াম সাবস্ক্রিপশন ২০২৫ সালের নভেম্বর পর্যন্ত সক্রিয় রয়েছে। আপনি ৯৯টি প্রোফাইল দেখতে পারবেন এবং সব প্রিমিয়াম ফিচার ব্যবহার করতে পারবেন।"
-                        : "Your premium subscription is active until November 2025. You have 99 profile views remaining and access to all premium features."}
-                    </p>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>

@@ -116,9 +116,13 @@ export default function LoginPage() {
       )}
     </button>
   );
-  // const handleGoogleLogin = () => {
-  //   window.location.href = `/api/auth/google-login`;
-  // };
+  
+  const SERVER_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000';
+
+  const handleOAuthLogin = (provider: 'google' | 'github' | 'yahoo') => {
+    // Redirect to backend OAuth route
+    window.location.href = `${SERVER_URL}/api/auth/${provider}`;
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-pink-50 flex items-center justify-center px-4">
@@ -356,7 +360,7 @@ export default function LoginPage() {
                   {/* Google */}
                   <button
                     type="button"
-                    onClick={() => (window.location.href = "/api/auth/google")}
+                    onClick={() => handleOAuthLogin('google')}
                     className="flex items-center justify-center w-12 h-12 rounded-full 
                  border border-emerald-500 bg-white 
                  hover:bg-emerald-50 hover:shadow-md 
@@ -368,9 +372,7 @@ export default function LoginPage() {
                   {/* Yahoo */}
                   <button
                     type="button"
-                    onClick={() =>
-                      (window.location.href = "/api/auth/yahoo")
-                    }
+                    onClick={() => handleOAuthLogin('yahoo')}
                     className="flex items-center justify-center w-12 h-12 rounded-full 
                  border border-emerald-500 bg-white 
                  hover:bg-emerald-50 hover:shadow-md 
@@ -382,7 +384,7 @@ export default function LoginPage() {
                   {/* Github */}
                   <button
                     type="button"
-                    onClick={() => (window.location.href = "/api/auth/github")}
+                    onClick={() => handleOAuthLogin('github')}
                     className="flex items-center justify-center w-12 h-12 rounded-full 
                  border border-emerald-500 bg-white 
                  hover:bg-emerald-50 hover:shadow-md 

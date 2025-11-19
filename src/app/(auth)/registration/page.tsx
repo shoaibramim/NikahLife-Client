@@ -173,6 +173,13 @@ export default function RegistrationPage() {
     setCurrentStep(1);
   };
 
+  const SERVER_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000';
+
+  const handleOAuthLogin = (provider: 'google' | 'github' | 'yahoo') => {
+    // Redirect to backend OAuth route
+    window.location.href = `${SERVER_URL}/api/auth/${provider}`;
+  };
+
   const steps = [
     { number: 1, title: "Basic Info", description: "Username and email" },
     {
@@ -668,7 +675,7 @@ export default function RegistrationPage() {
                   {/* Google */}
                   <button
                     type="button"
-                    onClick={() => (window.location.href = "/api/auth/google")}
+                    onClick={() => handleOAuthLogin('google')}
                     className="flex items-center justify-center w-12 h-12 rounded-full 
                                border border-emerald-500 bg-white 
                                hover:bg-emerald-50 hover:shadow-md 
@@ -680,9 +687,7 @@ export default function RegistrationPage() {
                   {/* Yahoo */}
                   <button
                     type="button"
-                    onClick={() =>
-                      (window.location.href = "/api/auth/yahoo")
-                    }
+                    onClick={() => handleOAuthLogin('yahoo')}
                     className="flex items-center justify-center w-12 h-12 rounded-full 
                                border border-emerald-500 bg-white 
                                hover:bg-emerald-50 hover:shadow-md 
@@ -694,7 +699,7 @@ export default function RegistrationPage() {
                   {/* Github */}
                   <button
                     type="button"
-                    onClick={() => (window.location.href = "/api/auth/github")}
+                    onClick={() => handleOAuthLogin('github')}
                     className="flex items-center justify-center w-12 h-12 rounded-full 
                                border border-emerald-500 bg-white 
                                hover:bg-emerald-50 hover:shadow-md 
